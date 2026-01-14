@@ -11,6 +11,8 @@ refs:
     rel: implements
   - uri: cog://spec/uri
     rel: implements
+  - uri: cog://spec/eigenform
+    rel: implements
 ---
 
 # CogOS
@@ -39,7 +41,7 @@ spec/cogdoc.cog.md IS → a cogdoc
 cogdoc describes → .cog/cog
 ```
 
-The loop is closed. φ(CogOS) = CogOS.
+The loop is closed. This is Φ₀ — the minimal eigenfield.
 
 ## Why "Holographic"
 
