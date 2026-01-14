@@ -1,0 +1,258 @@
+#!/bin/sh
+# .cog/cog - Universal entry point for cog workspaces
+#
+# This file IS the kernel. It lives inside the loop it validates.
+# φ(.cog/cog) = .cog/cog
+#
+# The first act of any cog workspace is to prove this file exists,
+# is executable, and can validate the structure that contains it.
+
+set -e
+
+# Find ourselves (the loop begins)
+COG_ROOT="$(cd "$(dirname "$0")" && pwd)"
+WORKSPACE_ROOT="$(cd "$COG_ROOT/.." && pwd)"
+
+# If compiled kernel exists, delegate to it
+if [ -x "$COG_ROOT/kernel/cog-binary" ]; then
+    exec "$COG_ROOT/kernel/cog-binary" "$@"
+fi
+
+# Colors (if terminal supports them)
+if [ -t 1 ]; then
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    YELLOW='\033[0;33m'
+    NC='\033[0m'
+else
+    GREEN='' RED='' YELLOW='' NC=''
+fi
+
+# -----------------------------------------------------------------------------
+# Core Operations (the irreducible six)
+# -----------------------------------------------------------------------------
+
+cmd_validate() {
+    echo "Validating loop closure..."
+    errors=0
+
+    # 1. Self-check: entry point
+    if [ -x "$COG_ROOT/cog" ]; then
+        printf "  ${GREEN}✓${NC} Entry point exists and is executable\n"
+    else
+        printf "  ${RED}✗${NC} Entry point missing or not executable\n"
+        errors=$((errors + 1))
+    fi
+
+    # 2. Identity check
+    if [ -f "$COG_ROOT/identity.cog.md" ]; then
+        # Verify it's a valid cogdoc (has YAML frontmatter)
+        if head -1 "$COG_ROOT/identity.cog.md" | grep -q '^---$'; then
+            printf "  ${GREEN}✓${NC} identity.cog.md exists and has frontmatter\n"
+        else
+            printf "  ${RED}✗${NC} identity.cog.md missing frontmatter\n"
+            errors=$((errors + 1))
+        fi
+    else
+        printf "  ${RED}✗${NC} identity.cog.md not found\n"
+        errors=$((errors + 1))
+    fi
+
+    # 3. Spec check: cogdoc format spec exists and is itself a cogdoc
+    if [ -f "$COG_ROOT/spec/cogdoc.cog.md" ]; then
+        if head -1 "$COG_ROOT/spec/cogdoc.cog.md" | grep -q '^---$'; then
+            printf "  ${GREEN}✓${NC} spec/cogdoc.cog.md exists (self-describing)\n"
+        else
+            printf "  ${RED}✗${NC} spec/cogdoc.cog.md is not a valid cogdoc\n"
+            errors=$((errors + 1))
+        fi
+    else
+        printf "  ${YELLOW}○${NC} spec/cogdoc.cog.md not found (minimal mode)\n"
+    fi
+
+    # 4. Git substrate check
+    if [ -d "$WORKSPACE_ROOT/.git" ]; then
+        if git -C "$WORKSPACE_ROOT" rev-parse --git-dir > /dev/null 2>&1; then
+            printf "  ${GREEN}✓${NC} Git substrate present\n"
+        else
+            printf "  ${RED}✗${NC} Git directory corrupt\n"
+            errors=$((errors + 1))
+        fi
+    else
+        printf "  ${YELLOW}○${NC} Git substrate not initialized\n"
+    fi
+
+    # 5. .cog/ tracked check
+    if [ -d "$WORKSPACE_ROOT/.git" ]; then
+        if git -C "$WORKSPACE_ROOT" ls-files --error-unmatch "$COG_ROOT/identity.cog.md" > /dev/null 2>&1; then
+            printf "  ${GREEN}✓${NC} .cog/ is tracked by git\n"
+        else
+            printf "  ${YELLOW}○${NC} .cog/ not yet committed\n"
+        fi
+    fi
+
+    echo ""
+    if [ $errors -eq 0 ]; then
+        printf "${GREEN}φ(.cog/cog) = .cog/cog ✓${NC}\n"
+        printf "Loop is closed. Projection system ready.\n"
+        return 0
+    else
+        printf "${RED}Loop broken: $errors error(s)${NC}\n"
+        return 1
+    fi
+}
+
+cmd_identity() {
+    if [ -f "$COG_ROOT/identity.cog.md" ]; then
+        cat "$COG_ROOT/identity.cog.md"
+    else
+        echo "No identity found. Run: .cog/cog init"
+        return 1
+    fi
+}
+
+cmd_init() {
+    target="${1:-.}"
+    cog_dir="$target/.cog"
+
+    if [ -f "$cog_dir/identity.cog.md" ]; then
+        echo "Workspace already initialized at $target"
+        return 1
+    fi
+
+    echo "Initializing cog workspace at $target..."
+
+    mkdir -p "$cog_dir/spec"
+
+    # Copy self as entry point (if initializing elsewhere)
+    if [ "$target" != "." ] && [ ! -f "$cog_dir/cog" ]; then
+        cp "$COG_ROOT/cog" "$cog_dir/cog"
+        chmod +x "$cog_dir/cog"
+    fi
+
+    # Create minimal identity
+    cat > "$cog_dir/identity.cog.md" << 'IDENTITY'
+---
+type: identity
+id: workspace
+created: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+status: active
+refs:
+  - cog://spec/cogdoc
+---
+
+# Workspace Identity
+
+This is a cog workspace - a self-referential cognitive substrate.
+
+The kernel (`.cog/cog`) validates the structure that contains it.
+The identity (this file) declares what the workspace is.
+The spec (`.cog/spec/`) describes the format used to describe itself.
+
+φ(workspace) = workspace
+IDENTITY
+
+    # Initialize git if needed
+    if [ ! -d "$target/.git" ]; then
+        git -C "$target" init
+        echo ".cog/kernel/cog-binary" >> "$target/.gitignore"
+        git -C "$target" add .cog/
+    fi
+
+    printf "${GREEN}✓${NC} Workspace initialized\n"
+    printf "Run: .cog/cog validate\n"
+}
+
+cmd_read() {
+    path="$1"
+    if [ -z "$path" ]; then
+        echo "Usage: .cog/cog read <path-or-uri>"
+        return 1
+    fi
+
+    # Resolve cog:// URIs
+    case "$path" in
+        cog://*)
+            # Strip cog:// prefix and resolve
+            relative="${path#cog://}"
+            resolved="$COG_ROOT/$relative"
+            if [ ! -f "$resolved" ] && [ ! -f "$resolved.cog.md" ]; then
+                echo "Cannot resolve: $path"
+                return 1
+            fi
+            [ -f "$resolved" ] && path="$resolved" || path="$resolved.cog.md"
+            ;;
+    esac
+
+    if [ -f "$path" ]; then
+        cat "$path"
+    else
+        echo "Not found: $path"
+        return 1
+    fi
+}
+
+cmd_query() {
+    # Minimal query: find cogdocs by type
+    query_type="$1"
+
+    if [ -z "$query_type" ]; then
+        # List all cogdocs
+        find "$COG_ROOT" -name "*.cog.md" -type f 2>/dev/null
+    else
+        # Find by type (grep frontmatter)
+        find "$COG_ROOT" -name "*.cog.md" -type f -exec grep -l "^type: $query_type" {} \; 2>/dev/null
+    fi
+}
+
+cmd_hash() {
+    # Hash the .cog/ tree (coherence primitive)
+    if command -v git > /dev/null && [ -d "$WORKSPACE_ROOT/.git" ]; then
+        git -C "$WORKSPACE_ROOT" ls-files -s .cog/ | git hash-object --stdin
+    else
+        # Fallback: hash file contents
+        find "$COG_ROOT" -type f -exec cat {} \; | sha256sum | cut -d' ' -f1
+    fi
+}
+
+cmd_help() {
+    cat << 'HELP'
+cog - Cognition on Git
+
+The universal entry point for cog workspaces. This file lives inside
+the structure it validates: φ(.cog/cog) = .cog/cog
+
+USAGE:
+    .cog/cog <command> [args]
+
+COMMANDS:
+    validate    Check loop closure (self-validation)
+    identity    Display workspace identity
+    init        Initialize a new workspace
+    read        Read a cogdoc (by path or cog:// URI)
+    query       Find cogdocs (by type)
+    hash        Compute coherence hash
+
+The kernel validates itself first, then the workspace.
+If validation passes, projection is safe.
+HELP
+}
+
+# -----------------------------------------------------------------------------
+# Dispatch
+# -----------------------------------------------------------------------------
+
+case "${1:-help}" in
+    validate)   cmd_validate ;;
+    identity)   cmd_identity ;;
+    init)       shift; cmd_init "$@" ;;
+    read)       shift; cmd_read "$@" ;;
+    query)      shift; cmd_query "$@" ;;
+    hash)       cmd_hash ;;
+    help|--help|-h) cmd_help ;;
+    *)
+        echo "Unknown command: $1"
+        echo "Run: .cog/cog help"
+        exit 1
+        ;;
+esac
