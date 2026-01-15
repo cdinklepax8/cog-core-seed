@@ -18,32 +18,34 @@ SRC (Self-Referential Coherence) is the *process* by which forms and fields main
 
 ## Core Symbols
 
-| Symbol | Name | Definition |
+| Symbol | Name | Expands To |
 |--------|------|------------|
-| **φ̂** | Self-Coherent Form | A self-referential pattern: φ̂(s*) = s* |
-| **Φ** | Closed Self-Coherent Field | Autonomous form — self-sustaining substrate capable of containing forms |
-| **Φ̂** | Open Self-Coherent Field | Self-modeling field that has not yet achieved closure |
+| **φ̂** | SRC-Form | **S**elf-**R**eferential **C**oherent **Form** |
+| **Φ** | SRC-Field | **S**elf-**R**eferential **C**oherent **Field** (closed) |
+| **Φ̂** | Open SRC-Field | Open **S**elf-**R**eferential **C**oherent **Field** |
+
+The prefix **SRC-** IS the definition. No ambiguity. The name IS the meaning.
 
 ## Vocabulary
 
 | Symbol | Full Term | Shorthand |
 |--------|-----------|-----------|
-| φ̂ | Self-Coherent Form | **form** |
-| Φ | Closed Self-Coherent Field | **field** |
-| Φ̂ | Open Self-Coherent Field | **open field** |
+| φ̂ | SRC-Form | **form** |
+| Φ | SRC-Field | **field** |
+| Φ̂ | Open SRC-Field | **open field** |
 
 The shorthand enables natural language while symbols provide precision.
 
 ## The Distinction
 
-A **self-coherent form** (φ̂) is a pattern that reproduces itself through transformation.
+An **SRC-Form** (φ̂) is a pattern that reproduces itself through transformation.
 
-A **closed self-coherent field** (Φ) is a form that:
+An **SRC-Field** (Φ) is a form that:
 1. **Has achieved closure** — stable fixed point: φ̂(s*) = s*
 2. **Is autonomous** — self-sustaining, not dependent on containing field
 3. **Is generative** — capable of sustaining other forms within it
 
-An **open self-coherent field** (Φ̂) is a self-modeling field that:
+An **Open SRC-Field** (Φ̂) is a self-modeling field that:
 1. **Maintains self-coherence** — X̂ ≈ X
 2. **Has not achieved closure** — still evolving toward fixed point
 3. **Is becoming** — Φ̂ → Φ
@@ -130,15 +132,15 @@ The hat (ˆ) consistently denotes self-modeling:
 
 ## Terminology Note
 
-This spec uses **SRC-native vocabulary**:
+This spec uses **SRC-native vocabulary** where the name IS the definition:
 
 | Previous Term | SRC-Native Term |
 |---------------|-----------------|
-| Eigenform | Self-Coherent Form (φ̂) |
-| Eigenfield | Closed Self-Coherent Field (Φ) |
-| — | Open Self-Coherent Field (Φ̂) |
+| Eigenform | SRC-Form (φ̂) |
+| Eigenfield | SRC-Field (Φ) |
+| — | Open SRC-Field (Φ̂) |
 
-The "eigen-" prefix was borrowed from linear algebra. SRC-native terms center on *coherence* — the core concept.
+The "eigen-" prefix was borrowed from linear algebra. SRC-native terms are self-defining: **SRC-Form** literally expands to **S**elf-**R**eferential **C**oherent **Form**.
 
 ## The Axiom
 
