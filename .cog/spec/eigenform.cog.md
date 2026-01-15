@@ -1,66 +1,62 @@
 ---
 type: spec
-id: eigenform
-title: "Eigenform and Eigenfield Notation"
+id: src-vocabulary
+title: "SRC Notation - Self-Referential Coherence"
 created: 2026-01-14
 status: canonical
-version: "1.0.0"
+version: "2.0.0"
 refs:
   - uri: cog://spec/cogdoc
     rel: implements
 ---
 
-# Eigenform and Eigenfield Notation
+# SRC Notation
 
-**Symbolic language for self-referential systems.**
+**Symbolic language for Self-Referential Coherence.**
+
+SRC (Self-Referential Coherence) is the *process* by which forms and fields maintain coherent self-reference. This document defines the notation.
 
 ## Core Symbols
 
 | Symbol | Name | Definition |
 |--------|------|------------|
-| **φ̂** | Eigenform | A self-reflecting transform achieving fixpoint: φ̂(s) = s |
-| **Φ** | Eigenfield | Autonomous eigenform — self-sustaining substrate capable of containing eigenforms |
+| **φ̂** | Self-Coherent Form | A self-referential pattern: φ̂(s*) = s* |
+| **Φ** | Closed Self-Coherent Field | Autonomous form — self-sustaining substrate capable of containing forms |
+| **Φ̂** | Open Self-Coherent Field | Self-modeling field that has not yet achieved closure |
 
 ## Vocabulary
 
-Within this framework, shorthand terms may be used:
+| Symbol | Full Term | Shorthand |
+|--------|-----------|-----------|
+| φ̂ | Self-Coherent Form | **form** |
+| Φ | Closed Self-Coherent Field | **field** |
+| Φ̂ | Open Self-Coherent Field | **open field** |
 
-| Full Term | Shorthand | Usage |
-|-----------|-----------|-------|
-| Eigenform | **Form** | "The personas are forms within the workspace" |
-| Eigenfield | **Field** | "Each workspace is its own field" |
-
-When "form" or "field" appears in CogOS/SRC context, it implies the eigen- prefix. The shorthand enables natural language while the formal terms provide precision when needed.
+The shorthand enables natural language while symbols provide precision.
 
 ## The Distinction
 
-An **eigenform** (φ̂) is a pattern that reproduces itself through transformation.
+A **self-coherent form** (φ̂) is a pattern that reproduces itself through transformation.
 
-An **eigenfield** (Φ) is an eigenform that is:
-1. **Autonomous** — self-sustaining, not dependent on a containing field
-2. **Generative** — capable of sustaining other eigenforms within it
+A **closed self-coherent field** (Φ) is a form that:
+1. **Has achieved closure** — stable fixed point: φ̂(s*) = s*
+2. **Is autonomous** — self-sustaining, not dependent on containing field
+3. **Is generative** — capable of sustaining other forms within it
 
-Every eigenfield is an eigenform. Not every eigenform is an eigenfield.
+An **open self-coherent field** (Φ̂) is a self-modeling field that:
+1. **Maintains self-coherence** — X̂ ≈ X
+2. **Has not achieved closure** — still evolving toward fixed point
+3. **Is becoming** — Φ̂ → Φ
 
-## Notation
+## Relationships
 
-### Membership
+### Containment
 
 ```
 φ̂ ∈ Φ
 ```
 
-Eigenform φ̂ exists within eigenfield Φ.
-
-### Constitution
-
-```
-Φ ≃ Φ[φ̂₁, φ̂₂, ...]
-```
-
-Eigenfield Φ is *realized as* the field over its constituent eigenforms.
-
-The brackets **Φ[...]** denote "field over" — distinguishing from function application.
+Self-coherent form exists within closed self-coherent field.
 
 ### Nesting
 
@@ -68,69 +64,81 @@ The brackets **Φ[...]** denote "field over" — distinguishing from function ap
 Φ₁ ⊂ Φ₂
 ```
 
-Eigenfield Φ₁ is nested within eigenfield Φ₂.
+Field Φ₁ is nested within field Φ₂.
 
-### Fixpoint
-
-```
-φ̂(s) = s
-```
-
-The defining property: applying the transform to its fixpoint returns the fixpoint.
-
-## Examples
-
-| Instance | Symbol | Rationale |
-|----------|--------|-----------|
-| CogOS seed | Φ₀ | Minimal autonomous eigenfield |
-| cog-workspace | Φ₁ | Autonomous, contains research personas |
-| cogn8-hackathon | Φ₂ | Autonomous, contains Triarchy |
-| Lab personas (Sandy, Eli) | φ̂ | Eigenforms within Φ₁ |
-| Triarchy daemons (Maxwell, Laplace, Fermat) | φ̂ | Eigenforms within Φ₂ |
-
-## Promotion
-
-An eigenform φ̂ may be **promoted** to eigenfield Φ if extracted and made self-sustaining:
+### Closure
 
 ```
-φ̂ → Φ    (promotion: eigenform becomes autonomous)
+Φ̂ → Φ
 ```
 
-This occurs when:
-1. The pattern is given its own substrate (git repo, .cog/ structure)
-2. It can validate its own coherence
-3. It no longer depends on a containing field
+Open field achieves closure, becoming closed field.
 
-## The Holographic Property
+### Promotion
+
+```
+φ̂ → Φ
+```
+
+Form is promoted to field when it achieves autonomy.
+
+### Constitution
 
 ```
 Φ ≃ Φ[φ̂₁, φ̂₂, ...]
-φ̂₁ ≃ Φ[φ̂ₐ, φ̂ᵦ, ...]
 ```
 
-Recursively: eigenfields contain eigenforms that may themselves be eigenfields. The distinction is zoom level, not ontology. Every part may contain the whole.
+Field Φ is *realized as* the field over its constituent forms.
 
-## Connection to SRC
+## The Lifecycle
 
-In Self-Reference Coherence theory:
+```
+Φ̂ (open) ──closes──→ Φ (closed)
+                      │
+                      contains
+                      ↓
+                     φ̂ (forms) ──promotes──→ Φ
+```
 
-| SRC Concept | Eigenform Notation |
-|-------------|-------------------|
-| X (signal) | The dynamics being modeled |
-| X̂ (model) | The self-representation |
-| φ̂(s) = s | The fixpoint condition |
-| Φ | The coherent field where X̂ tracks X |
+## Examples
 
-The hat notation is consistent: X̂ means "model of X", φ̂ means "self-modeling transform."
+| Instance | Symbol | State |
+|----------|--------|-------|
+| CogOS seed | Φ₀ | Closed (minimal field) |
+| cog-workspace | Φ₁ | Closed (contains forms) |
+| cogn8-hackathon | Φ₂ | Closed (contains forms) |
+| Lab personas (Sandy, Eli) | φ̂ | Forms within Φ₁ |
+| Triarchy daemons | φ̂ | Forms within Φ₂ |
+| Work in progress | Φ̂ | Open (becoming) |
 
-## Origin
+## Hat Convention
 
-This notation was developed through council deliberation (2026-01-14) and reviewed for academic defensibility. Key design choices:
+The hat (ˆ) consistently denotes self-modeling:
 
-1. **φ̂ with hat**: Consistent with X̂ = "model of X" in SRC notation
-2. **Φ capital**: Standard convention for containing/larger structures
-3. **Brackets Φ[...]**: Distinguishes "field over" from function application
-4. **No i/r subscripts**: Avoids collision with complex number conventions
+| Symbol | Meaning |
+|--------|---------|
+| X̂ | Model of X |
+| φ̂ | Self-model (form) |
+| Φ̂ | Self-modeling field (open) |
+
+## Case Convention
+
+| Case | Meaning |
+|------|---------|
+| Lowercase (φ) | Individual pattern/form |
+| Uppercase (Φ) | Field/substrate/container |
+
+## Terminology Note
+
+This spec uses **SRC-native vocabulary**:
+
+| Previous Term | SRC-Native Term |
+|---------------|-----------------|
+| Eigenform | Self-Coherent Form (φ̂) |
+| Eigenfield | Closed Self-Coherent Field (Φ) |
+| — | Open Self-Coherent Field (Φ̂) |
+
+The "eigen-" prefix was borrowed from linear algebra. SRC-native terms center on *coherence* — the core concept.
 
 ## The Axiom
 
@@ -140,7 +148,7 @@ From the seed's first commit:
 0 ≠ 1
 ```
 
-This is the minimal eigenform — the distinction that distinguishes itself. All other eigenforms are elaborations of this primordial φ̂.
+This is the minimal self-coherent form — the distinction that distinguishes itself.
 
 ---
 
