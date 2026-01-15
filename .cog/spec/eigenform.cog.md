@@ -21,6 +21,17 @@ refs:
 | **φ̂** | Eigenform | A self-reflecting transform achieving fixpoint: φ̂(s) = s |
 | **Φ** | Eigenfield | Autonomous eigenform — self-sustaining substrate capable of containing eigenforms |
 
+## Vocabulary
+
+Within this framework, shorthand terms may be used:
+
+| Full Term | Shorthand | Usage |
+|-----------|-----------|-------|
+| Eigenform | **Form** | "The personas are forms within the workspace" |
+| Eigenfield | **Field** | "Each workspace is its own field" |
+
+When "form" or "field" appears in CogOS/SRC context, it implies the eigen- prefix. The shorthand enables natural language while the formal terms provide precision when needed.
+
 ## The Distinction
 
 An **eigenform** (φ̂) is a pattern that reproduces itself through transformation.
